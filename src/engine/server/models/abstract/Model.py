@@ -1,6 +1,7 @@
 """Contain the factory function <model>"""
 from server.models.tensorflow_model import TensorflowModel
 from server.models.darknet_model import DarknetModel
+from server.models.box_inst import NuviBoxInst
 
 
 def Model(
@@ -13,6 +14,8 @@ def Model(
     model_class = {
         "tensorflow": TensorflowModel,
         "darknet": DarknetModel,
+        "boxinst": NuviBoxInst,
     }
 
     return model_class[model_type](*args, **kwargs)
+
