@@ -205,6 +205,7 @@ def register_model() -> tuple:
     try:
         # Check for empty API Body.
         data = request.get_json()
+        print(data)
         if not data:
             raise PortalError(
                 Errors.NOAPIBODY, "API body is required but not given."
@@ -253,10 +254,10 @@ def register_model() -> tuple:
                 Errors.INVALIDAPI,
                 "model_key needs to be given if input_type is 'hub'.",
             )
-        if model_type not in ["darknet", "tensorflow", "pytorch"]:
+        if model_type not in ["darknet", "tensorflow", "pytorch", "boxinst"]:
             raise PortalError(
                 Errors.INVALIDAPI,
-                "model_type needs to be one of 'darknet', 'tensorflow' or 'pytorch'.",
+                "model_type needs to be one of 'darknet', 'tensorflow', 'pytorch' or boxinst'.",
             )
         if input_type == "hub" and model_type != "tensorflow":
             raise PortalError(
@@ -268,6 +269,7 @@ def register_model() -> tuple:
             register_local(
                 input_directory, model_type, model_name, model_description
             )
+            print('REGISTERED')
 
         if input_type == "hub":
             register_hub(
