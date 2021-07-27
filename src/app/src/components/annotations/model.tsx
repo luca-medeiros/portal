@@ -609,6 +609,7 @@ export default class Model extends React.Component<ModelProps, ModelState> {
     const modelTypes = {
       tensorflow: "TensorFlow 2.0",
       darknet: "DarkNet (YOLO v3, YOLO v4)",
+      boxinst: "Adelaidet Boxinst",
     };
     const registerModelForm = (
       <div className={classes.RegistrationForm}>
@@ -636,6 +637,16 @@ export default class Model extends React.Component<ModelProps, ModelState> {
                       onClick={() => {
                         const event = {
                           target: { name: "modelType", value: "darknet" },
+                        };
+                        this.handleChangeForm(event);
+                      }}
+                    />
+                    <Menu.Item
+                      shouldDismissPopover={false}
+                      text={modelTypes.boxinst}
+                      onClick={() => {
+                        const event = {
+                          target: { name: "modelType", value: "boxinst" },
                         };
                         this.handleChangeForm(event);
                       }}
