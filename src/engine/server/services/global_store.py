@@ -261,9 +261,15 @@ class GlobalStore:
                     Errors.INVALIDAPI,
                     "A model with the same name already exists.",
                 )
-        serialized_model_class = jsonpickle.encode(model)
+        model_class = (
+            jsonpickle.encode(model) 
+            if self.caching_system
+            else model
+        )
+
+            
         self._store_["registry"][key] = {
-            "class": serialized_model_class,
+            "class": model_class,
             "model_dir": model_dir,
             "model_name": model_name,
         }
@@ -276,13 +282,20 @@ class GlobalStore:
         :return: The model as a Model class.
         """
         if key in self._store_["registry"]:
-            return jsonpickle.decode(self._store_["registry"][key]["class"])
+            model_class = self._store_["registry"][key]["class"]
+            if self.caching_system:
+                return jsonpickle.decode(model_class)
+            return model_class
         raise PortalError(Errors.INVALIDMODELKEY, "Model not registered.")
 
     def get_registered_model_info(self) -> str:
         """Retrieve directory, description, name of all registered models"""
         return {
-            model_id: jsonpickle.decode(model_dict["class"]).get_info()
+            model_id: (
+                jsonpickle.decode(model_dict["class"]).get_info()
+                if self.caching_system
+                else model_dict["class"].get_info()
+            )
             for model_id, model_dict in self._store_["registry"].items()
         }
 
